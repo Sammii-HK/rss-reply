@@ -1,0 +1,15 @@
+name = "twitter-rss"
+main = "src/index.js"
+compatibility_date = "2025-10-19"
+
+kv_namespaces = [
+  { binding = "FEEDS", id = "auto" },
+  { binding = "META", id = "auto" }
+]
+
+[triggers]
+crons = ["0 */3 * * *"]
+
+routes = [
+  { pattern = "https://feeds.sammii.dev/*", custom_domain = true }
+]
