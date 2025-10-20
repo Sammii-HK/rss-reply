@@ -3,13 +3,10 @@ main = "src/index.js"
 compatibility_date = "2025-10-19"
 
 kv_namespaces = [
-  { binding = "FEEDS", id = "auto" },
-  { binding = "META", id = "auto" }
+  { binding = "FEEDS", id = "9006b0c504c446b783dfbf1a57b4d3f3" },
+  { binding = "META", id = "22b6fd7827884b0b81cfd6371727b611" }
 ]
 
 [triggers]
 crons = ["0 */3 * * *"]
 
-routes = [
-  { pattern = "https://feeds.sammii.dev/*", custom_domain = true }
-]
