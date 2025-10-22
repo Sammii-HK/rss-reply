@@ -10,6 +10,31 @@ export default {
       return new Response("pong", { headers: { "access-control-allow-origin": "*" } });
     }
 
+    if (path === "/__write") {
+      try {
+        const key = url.searchParams.get("key") || "frontend.xml";
+        const q   = url.searchParams.get("q")   || "react";
+        const xml =
+          (await fetchViaRssBridge(q, { verbose: true })) ||
+          (await fetchViaNitter(q,   { verbose: true }));
+    
+        if (!xml) {
+          throw new Error(`no data from mirrors for query="${q}"`);
+        }
+    
+        await env.FEEDS.put(key, xml, { metadata: { query: q, ts: Date.now() } });
+        await env.META.put(key, JSON.stringify({ query: q, updated: Date.now() }));
+        return new Response(`wrote ${key} for "${q}"`);
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e);
+        console.log("WRITE_ERROR", msg);
+        return new Response(JSON.stringify({ error: msg }), {
+          status: 500,
+          headers: { "content-type": "application/json", "access-control-allow-origin": "*" }
+        });
+      }
+    }
+
     // --- Manual seed (no network) — proves KV+dashboard work
     if (path === "/__seed") {
       const key = "frontend.xml";
