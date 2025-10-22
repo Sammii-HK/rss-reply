@@ -1,12 +1,21 @@
 name = "twitter-rss"
 main = "src/index.js"
-compatibility_date = "2025-10-19"
+compatibility_date = "2025-10-08"
 
+# your existing KV ids here
 kv_namespaces = [
-  { binding = "FEEDS", id = "9006b0c504c446b783dfbf1a57b4d3f3" },
-  { binding = "META", id = "22b6fd7827884b0b81cfd6371727b611" }
+  { binding = "FEEDS", id = "PROD_FEEDS_ID", preview_id = "PREVIEW_FEEDS_ID" },
+  { binding = "META",  id = "PROD_META_ID",  preview_id = "PREVIEW_META_ID"  }
 ]
 
 [triggers]
-crons = ["0 */3 * * *"]
+crons = ["0 */3 * * *"]   # every 3 hours
 
+# map the worker to a subdomain on your Cloudflare zone
+routes = [
+  { pattern = "https://feeds.sammii.dev/*", custom_domain = true }
+]
+
+# optional: use edge resources during dev
+[dev]
+remote = true
